@@ -144,7 +144,10 @@ def main ():
             ties += 1
 
         if (epoch + 1) % results_window == 0:
-            loss_text = "not started" if loss is None else f"{loss.item():.4f}"
+            if loss is None:
+                loss_text = "not started"
+            else:
+                loss_text = f"{loss.item():.4f}"
             elapsed = format_elapsed_time(time.perf_counter() - start_time)
             print(f"{elapsed} Epoch {epoch + 1}/{epochs}, replay={len(replay)}, updates={updates}, loss={loss_text}, last {results_window}: wins={wins}, losses={losses}, ties={ties}")
             wins = 0
