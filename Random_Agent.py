@@ -25,5 +25,5 @@ class Random_Agent:
         return action, reward, next_state
 
 
-    def __call__(self, events=None, state=None):
+    def __call__(self, events=None, state=None, train=None):
         return self.get_action(events=events, state = state)

@@ -1,5 +1,4 @@
 from TicTacToe import TicTacToe
-import pygame
 from Graphics import *
 
 class Human_Agent:

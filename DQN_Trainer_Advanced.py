@@ -1,7 +1,7 @@
 from DQN import DQN
-from DQN_Agent import DQN_Agent
+from DqnAgent import DqnAgent
 from Random_Agent import Random_Agent
-from Random_Agent_Advanced import Random_Agent_Advanced
+from RandomAgentAdvanced import RandomAgentAdvanced
 from TicTacToe import TicTacToe
 from ReplayBuffer import ReplayBuffer
 from State import State
@@ -12,13 +12,15 @@ epochs = 500000
 C = 300
 batch = 64
 learning_rate = 0.1
-path = "Data\DQN_PARAM_Advanced_2.pth"
+path = "Data\DQN_PARAM_Advanced.pth"
+# path = "Data\DQN_PARAM_Advanced_2.pth"
 
+# Todo: break main() into functions.
 def main ():
     env = TicTacToe()
-    player1 = DQN_Agent(1, env=env)
+    player1 = DqnAgent(1, env=env)
     # player2 = Random_Agent(-1, env=env)
-    player2 = Random_Agent_Advanced(player=-1, env=env)
+    player2 = RandomAgentAdvanced(player=-1, env=env)
     replay = ReplayBuffer()
     Q = player1.DQN
     Q_hat :DQN = Q.copy()
@@ -30,15 +32,15 @@ def main ():
     for epoch in range(epochs):
         print (epoch, end="\r")
         state = State()
-        while not env.end_of_game(state):
+        while not env.is_end_of_game(state):
             action = player1.get_action(state, epoch=epoch)
             after_state, reward = env.next_state(state, action)
-            if env.end_of_game(after_state):
-                replay.push(state, action, reward, after_state, env.end_of_game(after_state))
+            if env.is_end_of_game(after_state):
+                replay.push(state, action, reward, after_state, env.is_end_of_game(after_state))
                 break
             after_action = player2.get_action(state=after_state)
             next_state, reward = env.next_state(after_state, after_action)
-            replay.push(state, action, reward, next_state, env.end_of_game(next_state))
+            replay.push(state, action, reward, next_state, env.is_end_of_game(next_state))
             state = next_state
 
             if epoch < 5000:

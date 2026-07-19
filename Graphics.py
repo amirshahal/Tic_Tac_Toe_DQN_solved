@@ -25,6 +25,8 @@ class Graphics:
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         self.header_surf = pygame.Surface((H_WIDTH, H_HEIGHT))
         self.main_surf = pygame.Surface((M_WIDTH, M_HEIGHT))
+        self.player_x_type = None
+        self.player_o_type = None
         pygame.display.set_caption('Tic Tac Toe')
         self.load_img()
 
@@ -35,17 +37,19 @@ class Graphics:
         self.draw_Lines()
         self.draw_pieces(state)
 
+        self.write_player_types()
+
         if state.end_of_game == 1:
-            self.write('Player X win')
+            self.write('Player X win', y=62, font_size=28)
         elif state.end_of_game == -1:
-            self.write('Player O win')
+            self.write('Player O win', y=62, font_size=28)
         elif state.end_of_game == 2:
-            self.write('Tie')
+            self.write('Tie', y=62, font_size=28)
         else:
             if state.player == 1:
-                self.write('Player X')
+                self.write('Player X', y=62, font_size=28)
             else:
-                self.write('Player O')
+                self.write('Player O', y=62, font_size=28)
 
         self.screen.blit(self.header_surf, (0,0))
         self.screen.blit(self.main_surf, (0,100))
@@ -54,14 +58,27 @@ class Graphics:
     def draw_Lines(self):
         for i in range(ROWS):
             pygame.draw.line(self.main_surf, BLACK, (i * SQUARE_SIZE, 0), 
-                             (i * SQUARE_SIZE , WIDTH), width=LINE_WIDTH)
+                             (i * SQUARE_SIZE , M_HEIGHT), width=LINE_WIDTH)
             pygame.draw.line(self.main_surf, BLACK, (0, i * SQUARE_SIZE), 
-                             (HEIGHT, i * SQUARE_SIZE ), width=LINE_WIDTH)
+                             (M_WIDTH, i * SQUARE_SIZE ), width=LINE_WIDTH)
 
-    def write(self, txt):
-        font = pygame.font.SysFont("Arial", 36)
+    def set_players(self, player_x, player_o):
+        self.player_x_type = self.agent_type(player_x)
+        self.player_o_type = self.agent_type(player_o)
+
+    def agent_type(self, player):
+        return type(player).__name__.replace('_', ' ')
+
+    def write_player_types(self):
+        if self.player_x_type:
+            self.write(f'Player X: {self.player_x_type}', y=6, font_size=22)
+        if self.player_o_type:
+            self.write(f'Player O: {self.player_o_type}', y=32, font_size=22)
+
+    def write(self, txt, y=10, font_size=36):
+        font = pygame.font.SysFont("Arial", font_size)
         txt_surf = font.render(txt, True, BLACK)
-        self.header_surf.blit(txt_surf, (10,10))
+        self.header_surf.blit(txt_surf, (10,y))
 
     def draw_pieces(self, state: State):
         board = state.board

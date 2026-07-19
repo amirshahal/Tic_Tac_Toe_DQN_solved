@@ -1,6 +1,7 @@
 import numpy as np
 import torch
 
+
 class State:
     def __init__(self, board = None, player = 1):
         if board is not None:
@@ -10,10 +11,9 @@ class State:
         self.player = player
         self.end_of_game = 0
 
-    def init_board(self):
+    @staticmethod
+    def init_board():
         board = np.zeros((3,3))
-        # board[1,1] = 1
-        # board[0,0] = -1
         return board
     
     def reset (self):
@@ -32,14 +32,14 @@ class State:
         tensor = torch.tensor(array, dtype=torch.float32, device=device)
         return tensor
     
-    [staticmethod]
+    @ staticmethod
     def tensorToState (state_tensor, player = 1):
         board = state_tensor.reshape([3,3]).cpu().numpy()
         return State(board, player)
 
     def __eq__(self, other) ->bool:
-        b1 = np.equal(self.board, other.board).all()
-        return np.equal(self.board, other.board).all()
+        is_equal = np.equal(self.board, other.board).all()
+        return bool(is_equal)
 
     def __hash__(self) -> int:
         return hash(repr(self.board))
