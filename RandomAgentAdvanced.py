@@ -139,6 +139,7 @@ if __name__ == '__main__':
     # ])
 
     # print(player.find_winning_action(board))
-    results = torch.load(f"Data/results_2.pth")
+    # results = torch.load(f"Data/results_2.pth")
+    results = torch.load(f"Data/results_advanced_o.epochs_500000.optimizer_SGD.lr_0p1.pth")
     player.plot_normalized_results(results,alpha=0.1)
     plt.show()
